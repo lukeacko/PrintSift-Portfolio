@@ -14,7 +14,7 @@ This repository is a **sanitised portfolio snapshot** of the project. The produc
 - REST API design and frontend/backend integration
 - SQLAlchemy persistence with SQLite/PostgreSQL support
 - Input validation with Pydantic
-- Admin/referral workflow and CSV export
+- Referral workflow and CSV export support in the API
 - Rate limiting, upload limits, CORS configuration and security headers
 - Automated testing with pytest
 
@@ -26,14 +26,15 @@ This repository is a **sanitised portfolio snapshot** of the project. The produc
 4. The AI extractor returns typed contract data plus evidence quotes and page numbers.
 5. PrintSift validates each evidence quote against the extracted source page.
 6. The frontend displays the contract terms and lets the user calculate estimated annual costs from usage data.
-7. Users can optionally submit a comparison request, which is stored for the admin workflow.
+7. Users can optionally submit a comparison request, which is stored for follow-up.
 
 ## Architecture
 
 ```text
-frontend/                    Next.js / TypeScript UI
-  src/app/                   Main application and admin pages
-  src/components/            Reusable UI components
+frontend/
+  src/app/page.tsx           Portfolio UI for contract upload, analysis and costs
+  src/app/layout.tsx         Application layout and metadata
+  src/app/globals.css        Global styling
   src/lib/api.ts             API configuration
 
 backend/
@@ -47,7 +48,10 @@ backend/
   app/calculations.py        Contract cost calculations
   app/database.py            SQLAlchemy database configuration
   app/referrals.py           Referral data model and persistence
+  tests/                     Public unit tests using synthetic data
 ```
+
+The private production project contains additional UI and development assets that are intentionally not included in this public snapshot.
 
 ## Security / privacy choices
 
@@ -102,7 +106,13 @@ npm run dev
 
 ## Testing
 
-The private development project includes pytest coverage around the database layer, extraction fixtures and security hardening. Public tests in this snapshot avoid including real contract documents.
+The private development project includes broader pytest coverage around the database layer, extraction fixtures and security hardening. Public tests in this snapshot use synthetic data and avoid including real contract documents.
+
+From the `backend` directory:
+
+```bash
+pytest -q
+```
 
 ## Why I built it
 
